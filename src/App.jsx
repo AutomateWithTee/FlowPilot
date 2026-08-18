@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import './App.css'
 
 const workflows = [
@@ -22,6 +23,13 @@ const workflows = [
 ]
 
 function App() {
+  const [filter, setFilter] = useState('All')
+
+  const filteredWorkflows =
+    filter === 'All'
+      ? workflows
+      : workflows.filter((workflow) => workflow.status === filter)
+
   return (
     <div className="app">
       <aside className="sidebar">
@@ -59,18 +67,37 @@ function App() {
         </section>
 
         <section className="workflows">
-          <h2>Recent Workflows</h2>
+          <div className="workflow-header">
+            <h2>Recent Workflows</h2>
 
-          {workflows.map((workflow) => (
-            <div className="workflow-card" key={workflow.id}>
-              <div>
-                <strong>{workflow.name}</strong>
-                <p>Last run {workflow.lastRun}</p>
-              </div>
-
-              <span>{workflow.status}</span>
+            <div className="filters">
+              {['All', 'Active', 'Paused'].map((status) => (
+                <button
+                  key={status}
+                  type="button"
+                  className={filter === status ? 'active-filter' : ''}
+                  onClick={() => setFilter(status)}
+                >
+                  {status}
+                </button>
+              ))}
             </div>
-          ))}
+          </div>
+
+          {filteredWorkflows.length > 0 ? (
+            filteredWorkflows.map((workflow) => (
+              <div className="workflow-card" key={workflow.id}>
+                <div>
+                  <strong>{workflow.name}</strong>
+                  <p>Last run {workflow.lastRun}</p>
+                </div>
+
+                <span>{workflow.status}</span>
+              </div>
+            ))
+          ) : (
+            <p className="empty-state">No workflows found.</p>
+          )}
         </section>
       </main>
     </div>

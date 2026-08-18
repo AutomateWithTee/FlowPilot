@@ -1,5 +1,26 @@
 import './App.css'
 
+const workflows = [
+  {
+    id: 1,
+    name: 'Lead Capture',
+    lastRun: '2 minutes ago',
+    status: 'Active',
+  },
+  {
+    id: 2,
+    name: 'Client Onboarding',
+    lastRun: '15 minutes ago',
+    status: 'Active',
+  },
+  {
+    id: 3,
+    name: 'Invoice Processing',
+    lastRun: '1 hour ago',
+    status: 'Paused',
+  },
+]
+
 function App() {
   return (
     <div className="app">
@@ -40,29 +61,16 @@ function App() {
         <section className="workflows">
           <h2>Recent Workflows</h2>
 
-          <div className="workflow-card">
-            <div>
-              <strong>Lead Capture</strong>
-              <p>Last run 2 minutes ago</p>
-            </div>
-            <span>Active</span>
-          </div>
+          {workflows.map((workflow) => (
+            <div className="workflow-card" key={workflow.id}>
+              <div>
+                <strong>{workflow.name}</strong>
+                <p>Last run {workflow.lastRun}</p>
+              </div>
 
-          <div className="workflow-card">
-            <div>
-              <strong>Client Onboarding</strong>
-              <p>Last run 15 minutes ago</p>
+              <span>{workflow.status}</span>
             </div>
-            <span>Active</span>
-          </div>
-
-          <div className="workflow-card">
-            <div>
-              <strong>Invoice Processing</strong>
-              <p>Last run 1 hour ago</p>
-            </div>
-            <span>Paused</span>
-          </div>
+          ))}
         </section>
       </main>
     </div>

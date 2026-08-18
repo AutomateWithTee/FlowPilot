@@ -69,14 +69,14 @@ function App() {
         <h2>FlowPilot</h2>
 
         <nav>
-          <a href="/">Dashboard</a>
+          <a href="#dashboard">Dashboard</a>
           <a href="#workflows">Workflows</a>
           <a href="#executions">Executions</a>
-          <a href="/">Settings</a>
+          <a href="#settings">Settings</a>
         </nav>
       </aside>
 
-      <main className="main-content">
+      <main className="main-content" id="dashboard">
         <header className="header">
           <h1>Good afternoon, Thelma</h1>
           <p>Here's what's happening with your workflows.</p>
@@ -127,7 +127,9 @@ function App() {
                 </small>
               </div>
 
-              <span className={`status-badge ${workflow.status.toLowerCase()}`}>
+              <span
+                className={`status-badge ${workflow.status.toLowerCase()}`}
+              >
                 {workflow.status}
               </span>
             </div>
@@ -153,6 +155,16 @@ function App() {
               </span>
             </div>
           ))}
+        </section>
+
+        <section className="workflows settings-section" id="settings">
+          <div className="workflow-header">
+            <h2>Settings</h2>
+          </div>
+
+          <p className="empty-state">
+            FlowPilot settings will be available here.
+          </p>
         </section>
       </main>
     </div>

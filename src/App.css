@@ -9,6 +9,11 @@ body {
   color: #1f2937;
 }
 
+button,
+a {
+  font: inherit;
+}
+
 .app {
   min-height: 100vh;
   display: flex;
@@ -95,8 +100,44 @@ body {
   border: 1px solid #e5e7eb;
 }
 
-.workflows h2 {
-  margin-top: 0;
+.workflow-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.workflow-header h2 {
+  margin: 0;
+}
+
+.filters {
+  display: flex;
+  gap: 8px;
+}
+
+.filters button {
+  border: 1px solid #d1d5db;
+  background: white;
+  color: #4b5563;
+  padding: 7px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.filters button:hover {
+  background: #f3f4f6;
+}
+
+.filters button.active-filter {
+  background: #111827;
+  color: white;
+  border-color: #111827;
+}
+
+.filters button:focus-visible {
+  outline: 3px solid #93c5fd;
+  outline-offset: 2px;
 }
 
 .workflow-card {
@@ -121,4 +162,9 @@ body {
 .workflow-card span {
   font-size: 14px;
   font-weight: 600;
+}
+
+.empty-state {
+  color: #6b7280;
+  padding: 20px 0;
 }

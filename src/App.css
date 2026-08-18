@@ -1,55 +1,34 @@
-.workflow-form {
-  margin: 20px 0;
-  padding: 24px;
-  background: #f9fafb;
-  border: 1px solid #e5e7eb;
-  border-radius: 10px;
+.execution-table {
+  margin-top: 10px;
+  border-top: 1px solid #e5e7eb;
 }
 
-.workflow-form h3 {
-  margin-top: 0;
-  margin-bottom: 20px;
-}
-
-.workflow-form label {
-  display: block;
-  margin-bottom: 16px;
-  font-weight: 600;
-}
-
-.workflow-form input,
-.workflow-form textarea {
-  display: block;
-  width: 100%;
-  margin-top: 7px;
-  padding: 10px 12px;
-  border: 1px solid #d1d5db;
-  border-radius: 7px;
-  font-family: inherit;
+.execution-row {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr 0.7fr 0.7fr;
+  align-items: center;
+  gap: 15px;
+  padding: 16px 0;
+  border-bottom: 1px solid #e5e7eb;
   font-size: 14px;
-  outline: none;
 }
 
-.workflow-form input:focus,
-.workflow-form textarea:focus {
-  border-color: #6b7280;
+.execution-heading {
+  color: #6b7280;
+  font-size: 13px;
 }
 
-.workflow-form textarea {
-  resize: vertical;
+.execution-row .status-badge {
+  width: fit-content;
 }
 
-.form-actions {
-  display: flex;
-  justify-content: flex-end;
-  gap: 10px;
-}
+@media (max-width: 800px) {
+  .execution-row {
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
 
-.workflow-card small {
-  display: block;
-  margin-top: 4px;
-}
-
-.workflow-card p {
-  max-width: 600px;
+  .execution-heading {
+    display: none;
+  }
 }

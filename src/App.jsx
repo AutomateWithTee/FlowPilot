@@ -7,18 +7,24 @@ const workflows = [
     name: 'Lead Capture',
     lastRun: '2 minutes ago',
     status: 'Active',
+    executions: 128,
+    failures: 2,
   },
   {
     id: 2,
     name: 'Client Onboarding',
     lastRun: '15 minutes ago',
     status: 'Active',
+    executions: 94,
+    failures: 0,
   },
   {
     id: 3,
     name: 'Invoice Processing',
     lastRun: '1 hour ago',
     status: 'Paused',
+    executions: 67,
+    failures: 4,
   },
 ]
 
@@ -89,7 +95,13 @@ function App() {
               <div className="workflow-card" key={workflow.id}>
                 <div>
                   <strong>{workflow.name}</strong>
+
                   <p>Last run {workflow.lastRun}</p>
+
+                  <small>
+                    {workflow.executions} executions · {workflow.failures}{' '}
+                    failures
+                  </small>
                 </div>
 
                 <span>{workflow.status}</span>

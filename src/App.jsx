@@ -28,6 +28,33 @@ const workflows = [
   },
 ]
 
+const executions = [
+  {
+    id: 1,
+    workflow: 'Lead Capture',
+    time: '2 minutes ago',
+    status: 'Success',
+  },
+  {
+    id: 2,
+    workflow: 'Client Onboarding',
+    time: '15 minutes ago',
+    status: 'Success',
+  },
+  {
+    id: 3,
+    workflow: 'Invoice Processing',
+    time: '1 hour ago',
+    status: 'Failed',
+  },
+  {
+    id: 4,
+    workflow: 'Lead Capture',
+    time: '2 hours ago',
+    status: 'Success',
+  },
+]
+
 function App() {
   const [filter, setFilter] = useState('All')
 
@@ -43,8 +70,8 @@ function App() {
 
         <nav>
           <a href="/">Dashboard</a>
-          <a href="/">Workflows</a>
-          <a href="/">Executions</a>
+          <a href="#workflows">Workflows</a>
+          <a href="#executions">Executions</a>
           <a href="/">Settings</a>
         </nav>
       </aside>
@@ -72,7 +99,7 @@ function App() {
           </div>
         </section>
 
-        <section className="workflows">
+        <section className="workflows" id="workflows">
           <div className="workflow-header">
             <h2>Recent Workflows</h2>
 
@@ -102,6 +129,27 @@ function App() {
 
               <span className={`status-badge ${workflow.status.toLowerCase()}`}>
                 {workflow.status}
+              </span>
+            </div>
+          ))}
+        </section>
+
+        <section className="workflows executions-section" id="executions">
+          <div className="workflow-header">
+            <h2>Recent Executions</h2>
+          </div>
+
+          {executions.map((execution) => (
+            <div className="workflow-card" key={execution.id}>
+              <div>
+                <strong>{execution.workflow}</strong>
+                <p>{execution.time}</p>
+              </div>
+
+              <span
+                className={`status-badge ${execution.status.toLowerCase()}`}
+              >
+                {execution.status}
               </span>
             </div>
           ))}

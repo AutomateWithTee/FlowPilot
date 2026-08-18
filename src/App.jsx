@@ -90,26 +90,21 @@ function App() {
             </div>
           </div>
 
-          {filteredWorkflows.length > 0 ? (
-            filteredWorkflows.map((workflow) => (
-              <div className="workflow-card" key={workflow.id}>
-                <div>
-                  <strong>{workflow.name}</strong>
-
-                  <p>Last run {workflow.lastRun}</p>
-
-                  <small>
-                    {workflow.executions} executions · {workflow.failures}{' '}
-                    failures
-                  </small>
-                </div>
-
-                <span>{workflow.status}</span>
+          {filteredWorkflows.map((workflow) => (
+            <div className="workflow-card" key={workflow.id}>
+              <div>
+                <strong>{workflow.name}</strong>
+                <p>Last run {workflow.lastRun}</p>
+                <small>
+                  {workflow.executions} executions · {workflow.failures} failures
+                </small>
               </div>
-            ))
-          ) : (
-            <p className="empty-state">No workflows found.</p>
-          )}
+
+              <span className={`status-badge ${workflow.status.toLowerCase()}`}>
+                {workflow.status}
+              </span>
+            </div>
+          ))}
         </section>
       </main>
     </div>

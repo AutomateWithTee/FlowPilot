@@ -35,17 +35,55 @@ const initialWorkflows = [
 ]
 
 const initialExecutions = [
-  { id: 1, workflow: 'Lead Capture', time: '2 minutes ago', status: 'Success', duration: '1.2s' },
-  { id: 2, workflow: 'Client Onboarding', time: '15 minutes ago', status: 'Success', duration: '2.4s' },
-  { id: 3, workflow: 'Invoice Processing', time: '1 hour ago', status: 'Failed', duration: '0.8s' },
-  { id: 4, workflow: 'Lead Capture', time: '2 hours ago', status: 'Success', duration: '1.1s' },
-  { id: 5, workflow: 'Client Onboarding', time: '3 hours ago', status: 'Success', duration: '2.0s' },
-  { id: 6, workflow: 'Invoice Processing', time: '4 hours ago', status: 'Failed', duration: '0.7s' },
+  {
+    id: 1,
+    workflow: 'Lead Capture',
+    time: '2 minutes ago',
+    status: 'Success',
+    duration: '1.2s',
+  },
+  {
+    id: 2,
+    workflow: 'Client Onboarding',
+    time: '15 minutes ago',
+    status: 'Success',
+    duration: '2.4s',
+  },
+  {
+    id: 3,
+    workflow: 'Invoice Processing',
+    time: '1 hour ago',
+    status: 'Failed',
+    duration: '0.8s',
+  },
+  {
+    id: 4,
+    workflow: 'Lead Capture',
+    time: '2 hours ago',
+    status: 'Success',
+    duration: '1.1s',
+  },
+  {
+    id: 5,
+    workflow: 'Client Onboarding',
+    time: '3 hours ago',
+    status: 'Success',
+    duration: '2.0s',
+  },
+  {
+    id: 6,
+    workflow: 'Invoice Processing',
+    time: '4 hours ago',
+    status: 'Failed',
+    duration: '0.7s',
+  },
 ]
 
 function App() {
   const [workflows, setWorkflows] = useState(initialWorkflows)
   const [executions] = useState(initialExecutions)
+
+  const [selectedWorkflow, setSelectedWorkflow] = useState(null)
 
   const [filter, setFilter] = useState('All')
   const [search, setSearch] = useState('')
@@ -128,8 +166,6 @@ function App() {
     })
 
     setShowForm(false)
-    setFilter('All')
-    setSearch('')
   }
 
   const toggleWorkflow = (id) => {
@@ -146,6 +182,20 @@ function App() {
           : workflow
       )
     )
+
+    setSelectedWorkflow((current) => {
+      if (!current || current.id !== id) {
+        return current
+      }
+
+      return {
+        ...current,
+        status:
+          current.status === 'Active'
+            ? 'Paused'
+            : 'Active',
+      }
+    })
   }
 
   const updateSetting = (name, value) => {
@@ -153,6 +203,7 @@ function App() {
       ...current,
       [name]: value,
     }))
+
     setSaved(false)
   }
 
@@ -162,6 +213,184 @@ function App() {
     setTimeout(() => {
       setSaved(false)
     }, 3000)
+  }
+
+  const openWorkflow = (workflow) => {
+    setSelectedWorkflow(workflow)
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth',
+    })
+  }
+
+  const closeWorkflow = () => {
+    setSelectedWorkflow(null)
+  }
+
+  if (selectedWorkflow) {
+    return (
+      <div className="app">
+        <aside className="sidebar">
+          <h2>FlowPilot</h2>
+
+          <nav>
+            <a href="#dashboard" onClick={closeWorkflow}>
+              Dashboard
+            </a>
+            <a href="#workflows" onClick={closeWorkflow}>
+              Workflows
+            </a>
+            <a href="#executions" onClick={closeWorkflow}>
+              Executions
+            </a>
+            <a href="#settings" onClick={closeWorkflow}>
+              Settings
+            </a>
+          </nav>
+        </aside>
+
+        <main className="main-content">
+          <button
+            type="button"
+            className="secondary-button"
+            onClick={closeWorkflow}
+          >
+            ← Back to Workflows
+          </button>
+
+          <header className="header workflow-detail-header">
+            <div>
+              <div className="detail-title">
+                <h1>{selectedWorkflow.name}</h1>
+
+                <span
+                  className={`status-badge ${selectedWorkflow.status.toLowerCase()}`}
+                >
+                  {selectedWorkflow.status}
+                </span>
+              </div>
+
+              <p>{selectedWorkflow.description}</p>
+            </div>
+
+            <button
+              type="button"
+              className="primary-button"
+              onClick={() =>
+                toggleWorkflow(selectedWorkflow.id)
+              }
+            >
+              {selectedWorkflow.status === 'Active'
+                ? 'Pause Workflow'
+                : 'Activate Workflow'}
+            </button>
+          </header>
+
+          <section className="stats">
+            <div className="stat-card">
+              <span>Total Executions</span>
+              <strong>
+                {selectedWorkflow.executions}
+              </strong>
+            </div>
+
+            <div className="stat-card">
+              <span>Failures</span>
+              <strong>
+                {selectedWorkflow.failures}
+              </strong>
+            </div>
+
+            <div className="stat-card">
+              <span>Last Run</span>
+              <strong className="detail-value">
+                {selectedWorkflow.lastRun}
+              </strong>
+            </div>
+          </section>
+
+          <section className="workflows">
+            <div className="workflow-header">
+              <div>
+                <h2>Workflow Details</h2>
+                <p>
+                  Configuration and activity for this
+                  workflow.
+                </p>
+              </div>
+            </div>
+
+            <div className="detail-grid">
+              <div className="detail-card">
+                <span>Trigger</span>
+                <strong>
+                  {selectedWorkflow.trigger}
+                </strong>
+              </div>
+
+              <div className="detail-card">
+                <span>Current Status</span>
+                <strong>
+                  {selectedWorkflow.status}
+                </strong>
+              </div>
+
+              <div className="detail-card">
+                <span>Executions</span>
+                <strong>
+                  {selectedWorkflow.executions}
+                </strong>
+              </div>
+
+              <div className="detail-card">
+                <span>Failures</span>
+                <strong>
+                  {selectedWorkflow.failures}
+                </strong>
+              </div>
+            </div>
+          </section>
+
+          <section className="workflows">
+            <div className="workflow-header">
+              <div>
+                <h2>Recent Activity</h2>
+                <p>
+                  Recent executions for this workflow.
+                </p>
+              </div>
+            </div>
+
+            {executions
+              .filter(
+                (execution) =>
+                  execution.workflow ===
+                  selectedWorkflow.name
+              )
+              .map((execution) => (
+                <div
+                  className="workflow-card"
+                  key={execution.id}
+                >
+                  <div>
+                    <strong>{execution.workflow}</strong>
+                    <p>{execution.time}</p>
+                    <small>
+                      Duration: {execution.duration}
+                    </small>
+                  </div>
+
+                  <span
+                    className={`status-badge ${execution.status.toLowerCase()}`}
+                  >
+                    {execution.status}
+                  </span>
+                </div>
+              ))}
+          </section>
+        </main>
+      </div>
+    )
   }
 
   return (
@@ -196,7 +425,8 @@ function App() {
             <strong>
               {
                 workflows.filter(
-                  (workflow) => workflow.status === 'Active'
+                  (workflow) =>
+                    workflow.status === 'Active'
                 ).length
               }
             </strong>
@@ -207,7 +437,8 @@ function App() {
             <strong>
               {
                 executions.filter(
-                  (execution) => execution.status === 'Failed'
+                  (execution) =>
+                    execution.status === 'Failed'
                 ).length
               }
             </strong>
@@ -218,7 +449,10 @@ function App() {
           <div className="workflow-header">
             <div>
               <h2>Workflows</h2>
-              <p>Manage and monitor your automation workflows.</p>
+              <p>
+                Manage and monitor your automation
+                workflows.
+              </p>
             </div>
 
             <button
@@ -231,7 +465,10 @@ function App() {
           </div>
 
           {showForm && (
-            <form className="workflow-form" onSubmit={createWorkflow}>
+            <form
+              className="workflow-form"
+              onSubmit={createWorkflow}
+            >
               <h3>Create Workflow</h3>
 
               <label>
@@ -277,7 +514,10 @@ function App() {
                   Cancel
                 </button>
 
-                <button type="submit" className="primary-button">
+                <button
+                  type="submit"
+                  className="primary-button"
+                >
                   Create Workflow
                 </button>
               </div>
@@ -289,40 +529,63 @@ function App() {
               type="search"
               placeholder="Search workflows..."
               value={search}
-              onChange={(event) => setSearch(event.target.value)}
+              onChange={(event) =>
+                setSearch(event.target.value)
+              }
             />
 
             <div className="filters">
-              {['All', 'Active', 'Paused'].map((status) => (
-                <button
-                  key={status}
-                  type="button"
-                  className={
-                    filter === status ? 'active-filter' : ''
-                  }
-                  onClick={() => setFilter(status)}
-                >
-                  {status}
-                </button>
-              ))}
+              {['All', 'Active', 'Paused'].map(
+                (status) => (
+                  <button
+                    key={status}
+                    type="button"
+                    className={
+                      filter === status
+                        ? 'active-filter'
+                        : ''
+                    }
+                    onClick={() =>
+                      setFilter(status)
+                    }
+                  >
+                    {status}
+                  </button>
+                )
+              )}
             </div>
           </div>
 
           {filteredWorkflows.map((workflow) => (
-            <div className="workflow-card" key={workflow.id}>
+            <div
+              className="workflow-card clickable"
+              key={workflow.id}
+              onClick={() => openWorkflow(workflow)}
+            >
               <div>
                 <strong>{workflow.name}</strong>
                 <p>{workflow.description}</p>
 
-                <small>Trigger: {workflow.trigger}</small>
+                <small>
+                  Trigger: {workflow.trigger}
+                </small>
+
                 <small>
                   {workflow.executions} executions ·{' '}
                   {workflow.failures} failures
                 </small>
-                <small>Last run: {workflow.lastRun}</small>
+
+                <small>
+                  Last run: {workflow.lastRun}
+                </small>
               </div>
 
-              <div className="workflow-actions">
+              <div
+                className="workflow-actions"
+                onClick={(event) =>
+                  event.stopPropagation()
+                }
+              >
                 <span
                   className={`status-badge ${workflow.status.toLowerCase()}`}
                 >
@@ -332,7 +595,9 @@ function App() {
                 <button
                   className="secondary-button"
                   type="button"
-                  onClick={() => toggleWorkflow(workflow.id)}
+                  onClick={() =>
+                    toggleWorkflow(workflow.id)
+                  }
                 >
                   {workflow.status === 'Active'
                     ? 'Pause'
@@ -343,11 +608,16 @@ function App() {
           ))}
         </section>
 
-        <section className="workflows" id="executions">
+        <section
+          className="workflows"
+          id="executions"
+        >
           <div className="workflow-header">
             <div>
               <h2>Executions</h2>
-              <p>Monitor every workflow execution.</p>
+              <p>
+                Monitor every workflow execution.
+              </p>
             </div>
           </div>
 
@@ -357,25 +627,31 @@ function App() {
               placeholder="Search executions..."
               value={executionSearch}
               onChange={(event) =>
-                setExecutionSearch(event.target.value)
+                setExecutionSearch(
+                  event.target.value
+                )
               }
             />
 
             <div className="filters">
-              {['All', 'Success', 'Failed'].map((status) => (
-                <button
-                  key={status}
-                  type="button"
-                  className={
-                    executionFilter === status
-                      ? 'active-filter'
-                      : ''
-                  }
-                  onClick={() => setExecutionFilter(status)}
-                >
-                  {status}
-                </button>
-              ))}
+              {['All', 'Success', 'Failed'].map(
+                (status) => (
+                  <button
+                    key={status}
+                    type="button"
+                    className={
+                      executionFilter === status
+                        ? 'active-filter'
+                        : ''
+                    }
+                    onClick={() =>
+                      setExecutionFilter(status)
+                    }
+                  >
+                    {status}
+                  </button>
+                )
+              )}
             </div>
           </div>
 
@@ -388,7 +664,10 @@ function App() {
             </div>
 
             {filteredExecutions.map((execution) => (
-              <div className="execution-row" key={execution.id}>
+              <div
+                className="execution-row"
+                key={execution.id}
+              >
                 <span>{execution.workflow}</span>
                 <span>{execution.time}</span>
                 <span>{execution.duration}</span>
@@ -403,11 +682,16 @@ function App() {
           </div>
         </section>
 
-        <section className="workflows" id="settings">
+        <section
+          className="workflows"
+          id="settings"
+        >
           <div className="workflow-header">
             <div>
               <h2>Settings</h2>
-              <p>Manage your FlowPilot preferences.</p>
+              <p>
+                Manage your FlowPilot preferences.
+              </p>
             </div>
           </div>
 
@@ -415,14 +699,19 @@ function App() {
             <div className="setting-row">
               <div>
                 <strong>Email Address</strong>
-                <p>Used for FlowPilot notifications.</p>
+                <p>
+                  Used for FlowPilot notifications.
+                </p>
               </div>
 
               <input
                 type="email"
                 value={settings.email}
                 onChange={(event) =>
-                  updateSetting('email', event.target.value)
+                  updateSetting(
+                    'email',
+                    event.target.value
+                  )
                 }
               />
             </div>
@@ -430,7 +719,10 @@ function App() {
             <div className="setting-row">
               <div>
                 <strong>Email Notifications</strong>
-                <p>Receive important FlowPilot notifications.</p>
+                <p>
+                  Receive important FlowPilot
+                  notifications.
+                </p>
               </div>
 
               <label className="toggle">
@@ -451,7 +743,9 @@ function App() {
             <div className="setting-row">
               <div>
                 <strong>Failed Workflow Alerts</strong>
-                <p>Get notified when a workflow fails.</p>
+                <p>
+                  Get notified when a workflow fails.
+                </p>
               </div>
 
               <label className="toggle">
@@ -472,7 +766,10 @@ function App() {
             <div className="setting-row">
               <div>
                 <strong>Weekly Summary</strong>
-                <p>Receive a weekly workflow performance summary.</p>
+                <p>
+                  Receive a weekly workflow performance
+                  summary.
+                </p>
               </div>
 
               <label className="toggle">
